@@ -67,7 +67,7 @@ namespace TDE_ALEXANDRE
                 errorProvider.SetError(txtEmail, "");
                 desgraca = 0;
             }
-            if(txtNome.Text == "")
+            if (txtNome.Text == "")
             {
                 errorProvider.SetError(txtNome, "Nome Obrigatório");
                 desgraca = 1;
@@ -117,12 +117,14 @@ namespace TDE_ALEXANDRE
                 errorProvider.SetError(txtConfirmarSenha, "");
                 desgraca = 0;
             }
-            if(desgraca == 1)
+            if (desgraca == 1)
             {
                 MessageBox.Show("Por favor, preencha os campos obrigatórios");
             }
-            else
+            else if (desgraca == 0)
             {
+                MessageBox.Show("Cadastro salvo com sucesso!");
+
                 bool checkDirExist = Directory.Exists(path);
                 if (!checkDirExist)
                 {
@@ -130,8 +132,8 @@ namespace TDE_ALEXANDRE
                 }
 
                 bool checkFileExist = File.Exists(file);
-                String line = "|| " + txtNome.Text + " || " + txtSobrenome.Text + " || " + mtbCPF.Text + " || " + txtSenha.Text + " || " + txtEmail.Text + " ||";
-
+                String line = txtNome.Text + "|" + txtSobrenome.Text + "|" + mtbCPF.Text + "|" + txtEmail.Text + "|" + txtSenha.Text + "|";
+                
                 if (!checkFileExist)
                 {
                     using (StreamWriter sw = File.CreateText(file))
@@ -146,9 +148,9 @@ namespace TDE_ALEXANDRE
                         sw.WriteLine(line);
                     }
                 }
-            }       
-        }          
-        
+            }
+        }
+
         private void btnLimpar_Click(object sender, EventArgs e)
         {
             //textbox clear code
@@ -159,10 +161,47 @@ namespace TDE_ALEXANDRE
             txtEmail.Text = "";
 
             //maskedtextbox clear code
-            mtbCPF.Text = "";            
+            mtbCPF.Text = "";
         }
 
         private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tabPage1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnImportar_Click(object sender, EventArgs e)
+        {
+            if (File.Exists(file))
+            {
+                dataGridView1.Rows.Clear();
+                using (StreamReader sr = new StreamReader(file))
+                {
+                    int line = 0;
+                    string In;
+
+                    while ((In = sr.ReadLine()) != null)
+                    {
+                        //Console.WriteLine(In);
+
+                        //MessageBox.Show(In);
+                        string[] fields = In.Split('|');
+
+                        dataGridView1.Rows.Add(fields[0], fields[1], fields[2], fields[3], fields[4]);
+
+                        line++;
+                    }
+                    sr.Close();
+
+                }
+            }
+        }
+
+        private void dgvBanco_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
         }
